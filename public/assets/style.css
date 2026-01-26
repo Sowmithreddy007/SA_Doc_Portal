@@ -1,0 +1,92 @@
+:root {
+    --primary: #0f2854;
+    --accent: #4988c4;
+    --bg-pleasant: linear-gradient(135deg, #0f2854 0%, #1c4d8d 33%, #4988c4 66%, #bde8f5 100%);
+    --paper-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+body {
+    background: var(--bg-pleasant);
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    transition: background 0.5s ease;
+}
+
+/* THE A4 ENGINE */
+.a4-page {
+    width: 210mm;
+    height: 297mm;
+    margin: 40px auto;
+    background: white;
+    box-shadow: var(--paper-shadow);
+    display: flex;
+    flex-direction: column; /* This allows the footer to pin */
+    box-sizing: border-box;
+    padding: 20mm 15mm 15mm 15mm; /* Standard Margins */
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.letter-content-area {
+    flex: 1; /* This pushes the footer down */
+}
+
+.letter-footer {
+    border-top: 1px solid #eee;
+    padding-top: 10mm;
+    margin-top: auto; /* Force to bottom */
+    text-align: center;
+    font-size: 9pt;
+    color: #666;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-classic {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-classic:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+@media print {
+    /* Suppress browser header/footer (like URLs) */
+    @page {
+        margin: 0;
+        size: auto;
+    }
+
+    body { 
+        background: none; 
+        -webkit-print-color-adjust: exact; 
+    }
+
+    .a4-page {
+        margin: 0;
+        box-shadow: none;
+        width: 210mm;
+        height: 297mm;
+        page-break-after: always;
+        /* Ensure display flex is maintained for footer pinning */
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .letter-footer {
+        position: absolute;
+        bottom: 15mm;
+        left: 15mm;
+        right: 15mm;
+    }
+
+    .d-print-none { display: none !important; }
+}
