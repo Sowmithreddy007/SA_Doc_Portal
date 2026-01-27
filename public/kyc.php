@@ -1,4 +1,5 @@
 <?php
+require_once 'require_auth.php';
 require_once '../src/Database.php';
 require_once '../src/UserKYC.php';
 

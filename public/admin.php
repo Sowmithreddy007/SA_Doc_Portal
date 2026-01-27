@@ -4,14 +4,10 @@ require_once '../src/Auth.php';
 require_once '../src/LetterManager.php';
 require_once '../src/UserKYC.php';
 
-if (isset($_POST['login'])) {
-    if (Auth::login($_POST['username'], $_POST['password'])) {
-        header("Location: admin.php"); exit;
-    }
-}
-
 if (isset($_GET['logout'])) {
-    Auth::logout(); header("Location: admin.php"); exit;
+    Auth::logout(); 
+    header("Location: login.php"); 
+    exit;
 }
 
 // Handle KYC operations
@@ -44,41 +40,7 @@ if (isset($_GET['delete_kyc'])) {
     exit;
 }
 
-if (!Auth::check() && !isset($_POST['login'])) {
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Login | DocPortal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: linear-gradient(135deg, #0f2854 0%, #1c4d8d 33%, #4988c4 66%, #bde8f5 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', sans-serif; }
-        .login-card { background: #ffffff; border: none; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 40px; width: 100%; max-width: 400px; }
-        .btn-primary { background: #0f2854; border: none; padding: 12px; border-radius: 10px; transition: background 0.3s; }
-        .btn-primary:hover { background: #1c4d8d; }
-        .btn-home { color: #666; text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-        .btn-home:hover { color: #000; }
-    </style>
-</head>
-<body>
-    <div class="login-card text-center">
-        <h3 class="fw-bold mb-4" style="color: #0f2854;">Admin Portal</h3>
-        <form method="POST">
-            <div class="mb-3 text-start">
-                <label class="form-label small fw-bold">Username</label>
-                <input name="username" class="form-control" required autofocus>
-            </div>
-            <div class="mb-4 text-start">
-                <label class="form-label small fw-bold">Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-            <button name="login" class="btn btn-primary w-100 mb-3 shadow">Sign In</button>
-            <a href="index.php" class="btn-home">← Back to Home</a>
-        </form>
-    </div>
-</body>
-</html>
-<?php exit; } ?>
+require_once 'require_auth.php';
 
 <!DOCTYPE html>
 <html>
@@ -107,7 +69,7 @@ if (!Auth::check() && !isset($_POST['login'])) {
                     <a href="?tab=kyc" class="nav-link text-white <?= ($_GET['tab'] ?? '') === 'kyc' ? 'active' : '' ?>">KYC Management</a>
                 </li>
                 <li class="nav-item mb-3">
-                    <a href="index.php" class="nav-link text-white">Public Portal</a>
+                    <a href="index.php" class="nav-link text-white">Dashboard</a>
                 </li>
                 <li class="nav-item mt-5">
                     <a href="?logout=1" class="btn btn-outline-light btn-sm w-100">Logout</a>

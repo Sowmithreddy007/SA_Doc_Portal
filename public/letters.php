@@ -1,9 +1,24 @@
 <?php
+require_once 'require_auth.php';
 require_once '../src/Database.php';
 require_once '../src/LetterManager.php';
 require_once '../src/LetterTypeManager.php';
 
 $csrf_token = '';
+
+// Delete letter
+if (isset($_GET['delete_letter'])) {
+    try {
+        $id = (int)($_GET['delete_letter'] ?? 0);
+        if ($id > 0) {
+            LetterManager::deleteLetter($id, $_SESSION['user_id'] ?? null);
+            header("Location: letters.php?deleted=1");
+            exit;
+        }
+    } catch (Exception $e) {
+        $error = "Error deleting letter: " . htmlspecialchars($e->getMessage());
+    }
+}
 
 // Get all letters
 try {
@@ -77,6 +92,13 @@ try {
                 <h3>Documentation Repository</h3>
                 <span class="badge bg-primary px-3 py-2">Total: <?= count(LetterManager::getAllLetters()) ?> Records</span>
             </div>
+
+            <?php if (isset($_GET['deleted'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Letter deleted successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
             
             <div class="table-card">
                 <table class="table table-hover align-middle">
@@ -92,7 +114,7 @@ try {
                     </thead>
                     <tbody>
                         <?php if (empty($all_letters)): ?>
-                            <tr><td colspan="5" class="text-center text-muted py-4">No letters created yet</td></tr>
+                            <tr><td colspan="6" class="text-center text-muted py-4">No letters created yet</td></tr>
                         <?php else: ?>
                             <?php foreach($all_letters as $l): ?>
                             <tr>
@@ -103,6 +125,7 @@ try {
                                 <td class="text-muted small"><?= date('M d, Y H:i', strtotime($l['created_at'])) ?></td>
                                 <td class="text-end">
                                     <a href="view-letter.php?id=<?= $l['id'] ?>" class="btn btn-sm btn-primary">View Letter</a>
+                                    <a href="letters.php?delete_letter=<?= $l['id'] ?>" class="btn btn-sm btn-outline-danger ms-2" onclick="return confirm('Delete this letter (#<?= $l['id'] ?>)? This cannot be undone.')">Delete</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
