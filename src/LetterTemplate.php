@@ -72,7 +72,7 @@ class LetterTemplate {
         <div class="letter-footer">
             <p>Opp. Telangana Forest Academy, Dhulapally, Near Kompally, Medchal Dist.,</p>
             <p>Telangana, India - 500 100</p>
-            <p>Mobile - +91 89770 59315 e-mail - specanciens@stpetershyd.com</p>
+            <p>Mobile - +91 89770 59315 e-mail - specanciens@stpetershyd.com | www.specanciens.com</p>
         </div>';
     }
     
